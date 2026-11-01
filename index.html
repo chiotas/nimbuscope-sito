@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NimbuScope</title>
+<meta name="description" content="NimbuScope follows the sun’s ray through the forecast clouds and tells you, minute by minute, if sunrise and sunset light will reach the spot where you shoot.">
+<meta name="theme-color" content="#27406C">
+<link rel="canonical" href="https://nimbuscope.com/">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
+<link rel="icon" href="/icona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/red-hat-display-normal-400-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/red-hat-text-normal-400-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NimbuScope">
+<meta property="og:url" content="https://nimbuscope.com/">
+<meta property="og:title" content="NimbuScope · Will the light get through?">
+<meta property="og:description" content="NimbuScope follows the sun’s ray through the forecast clouds and tells you, minute by minute, if sunrise and sunset light will reach the spot where you shoot.">
+<meta property="og:image" content="https://nimbuscope.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="NimbuScope: the sun’s ray over the curved Earth, under a bank of clouds at sunset">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root {
+  --notte: #0E1726; --notte-2: #142036; --terra-mappa: #2B3C5C;
+  --c1: #27406C; --c2: #5F77A3; --c3: #F2B07A;
+  --testo: #FFFFFF; --testo-2: rgba(255,255,255,.84); --testo-3: rgba(255,255,255,.62); --filo: rgba(255,255,255,.14);
+  --oro: #FFC64A; --raggio: #FFAE42; --basse: #7DB4FF; --medie: #B79CFF; --alte: #FF8FA3;
+  --titolo: 'Red Hat Display', 'Helvetica Neue', Arial, sans-serif; --testo-font: 'Red Hat Text', 'Helvetica Neue', Arial, sans-serif;
+  --p-titoli: 400; --tr-titoli: -0.03em;      
+  --p-forte: 600;                             
+  --p-etichette: 500; --tr-etichette: 0.01em; 
+  --p-marchio: 700;                           
+  --interlinea: 1.6; --interlinea-apertura: 1.55;
+  --lato: 22px; --largo: 1120px;
+  color-scheme: dark; font-synthesis: none;
+}
+* { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; background: var(--notte); }
+body { background: var(--notte); color: var(--testo); font: 400 1.125rem/var(--interlinea) var(--testo-font); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+:focus-visible { outline: 2px solid var(--testo); outline-offset: 3px; border-radius: 4px; }
+.riga-pag { max-width: calc(var(--largo) + 2 * var(--lato)); margin: 0 auto; padding-left: max(var(--lato), env(safe-area-inset-left, 0px)); padding-right: max(var(--lato), env(safe-area-inset-right, 0px)); }
+.sezione { padding-block: 44px; }
+#app { padding-bottom: 52px; }   
+.occhiello { color: var(--testo-3); font-size: 1rem; }
+h2 { margin-top: 10px; font-weight: 300; font-size: 2.375rem; line-height: 1.08; letter-spacing: -0.022em; text-wrap: balance; max-width: 18ch; }
+h3 { font-weight: 500; font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.005em; }
+:root :is(h1, h2, h3, .ora, .verdetto, .n, .grande, .autore blockquote, .grazie, .modelli .nome, .modelli .km, .marchio) { font-family: var(--titolo); }
+:root :is(h1, h2, .ora, .grande, .autore blockquote, .modelli .km) { font-weight: var(--p-titoli); }
+:root :is(h1, h2, .grande) { letter-spacing: var(--tr-titoli); }
+:root :is(h3, .n, .modelli .nome, .idea-testi strong, .visuale p strong, .autore .firma b, .tasto, .apertura .tasto) { font-weight: var(--p-forte); }
+:root :is(.verdetto, .grazie, .occhiello, .legenda, .minuti-scritte, .idea-nota, .mappa figcaption, .m-nome, .idea-scena text, .lingue [aria-current]) { font-weight: var(--p-etichette); }
+:root :is(.occhiello, .legenda, .minuti-scritte, .idea-nota, .mappa figcaption) { letter-spacing: var(--tr-etichette); }
+:root :is(.marchio, .apertura .marchio) { font-weight: var(--p-marchio); }
+.intro { margin-top: 18px; max-width: 34ch; color: var(--testo-2); text-wrap: pretty; }
+p { text-wrap: pretty; }
+.tasto {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px;
+  background: rgba(255,255,255,.95); color: var(--notte); font: 500 1rem/1 var(--testo-font); text-decoration: none; cursor: pointer; transition: transform 120ms ease-out;
+}
+.tasto:active { transform: scale(.96); }
+.tasto.piccolo { min-height: 40px; padding: 0 17px; }
+.apertura { --c1: #27406C; --c2: #5D74A0; --c3: #F0AE78; --terra: #0E1726; --bianco: #FFFFFF; --testo2: rgba(255,255,255,.84); --testo3: rgba(255,255,255,.62); --lato: 22px; --basse: #7DB4FF; --medie: #B79CFF; --alte: #FF8FA3; color-scheme: dark; }
+.apertura .cielo { position: relative; background: linear-gradient(var(--c1) 0%, var(--c2) 52%, var(--c3) 100%); }
+.apertura .cielo > :not(.scena) { position: relative; z-index: 1; }
+.apertura .testa { display: flex; align-items: center; justify-content: space-between; padding: 16px var(--lato) 0; }
+.apertura .marchio { display: inline-flex; align-items: center; gap: 14px; font-weight: var(--p-marchio); font-size: 1.875rem; line-height: 1; letter-spacing: -0.02em; text-decoration: none; }
+.apertura .marchio img { width: 48px; height: 48px; border-radius: 22.5%; box-shadow: 0 10px 22px -12px rgba(4,8,20,.7), 0 2px 6px -3px rgba(4,8,20,.45); }
+.apertura .tasto { display: inline-flex; align-items: center; min-height: 40px; padding: 0 17px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--terra); font-weight: var(--p-forte); font-size: 1rem; text-decoration: none; transition: transform 120ms ease-out; }
+.apertura .tasto:active { transform: scale(.96); }
+.apertura h1 { margin: 22px var(--lato) 0; font-weight: var(--p-titoli); font-size: 3rem; line-height: 1; letter-spacing: var(--tr-titoli); text-wrap: balance; }
+.apertura .cosa { margin: 14px var(--lato) 0; max-width: 30ch; color: var(--testo2); font-size: 1.0625rem; line-height: var(--interlinea-apertura); text-wrap: pretty; }
+.apertura .scena { position: relative; height: 520px; margin-top: -136px; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.apertura .scena canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.apertura .mare { position: relative; padding: 2px var(--lato) 48px; }
+.apertura .legenda { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 10px; color: var(--testo3); font-size: 0.875rem; font-weight: var(--p-etichette); letter-spacing: var(--tr-etichette); }
+.apertura .legenda span { display: inline-flex; align-items: center; gap: 7px; }
+.apertura .legenda i { width: 16px; height: 0; border-top: 1.5px dashed; }
+.apertura .ora-verdetto { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 14px; }
+.apertura .ora { font-weight: var(--p-titoli); font-size: 3.75rem; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums lining-nums; }
+.apertura .verdetto { font-weight: var(--p-etichette); font-size: 1.75rem; line-height: 1.15; }
+.apertura .riga { margin-top: 6px; min-height: 1.45em; color: var(--testo3); font-size: 1.125rem; line-height: 1.45; }
+.apertura .cursore { position: relative; height: 58px; margin: 0 -13px; touch-action: pan-y; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.apertura .cursore svg { position: absolute; left: 13px; top: 0; width: calc(100% - 26px); height: 100%; overflow: visible; }
+.apertura .cursore .luce { fill: #FFC64A; }
+.apertura .cursore .spenta { fill: rgba(255,255,255,.22); }
+.apertura .cursore text { fill: #FFC64A; font: var(--p-etichette) .875rem/1 var(--testo-font); font-variant-numeric: tabular-nums lining-nums; letter-spacing: var(--tr-etichette); }
+.apertura .cursore input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; pointer-events: none; background: none; -webkit-appearance: none; appearance: none; }
+.apertura .cursore input::-webkit-slider-runnable-track { height: 100%; background: none; }
+.apertura .cursore input::-moz-range-track { background: none; }
+.apertura .cursore input::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: 7px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 .5px 2px rgba(0,0,0,.3), 0 3px 8px rgba(0,0,0,.14); transition: transform 140ms ease-out; }
+.apertura .cursore input::-moz-range-thumb { width: 26px; height: 26px; border: 0; border-radius: 50%; background: #FFFFFF; box-shadow: 0 .5px 2px rgba(0,0,0,.3), 0 3px 8px rgba(0,0,0,.14); transform: translateY(-13px); }
+.apertura .cursore.preso input::-webkit-slider-thumb { transform: scale(1.08); }
+.apertura .cursore input:focus-visible { outline: none; }
+.apertura .cursore input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--bianco); outline-offset: 3px; }
+.apertura .nota { margin-top: 14px; color: var(--testo3); font-size: 0.9375rem; max-width: 38ch; }
+@media (min-width: 900px) {
+  .apertura { --lato: max(40px, calc(50vw - 560px)); }
+  .apertura .cielo { height: 700px; }
+  .apertura .testa { padding-top: 26px; }
+  .apertura .marchio { gap: 18px; font-size: 2.625rem; }
+  .apertura .marchio img { width: 68px; height: 68px; }
+  .apertura h1 { margin-top: 30px; font-size: 4.5rem; max-width: 9ch; }
+  .apertura .cosa { margin-top: 18px; max-width: 30ch; font-size: 1.25rem; }
+  .apertura .scena { position: absolute; inset: 0; height: auto; margin: 0; }
+  .apertura .mare { padding-top: 4px; padding-bottom: calc(76px + var(--tel-sotto, 0px)); }
+  .apertura .lettura { max-width: 720px; }
+  .apertura .cursore { max-width: 742px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .apertura .tasto, .apertura .cursore input::-webkit-slider-thumb { transition: none; }
+}
+.apertura { font: 400 1.1875rem/var(--interlinea-apertura) var(--testo-font); background: var(--terra); }
+.apertura .mare { background: linear-gradient(var(--terra) 55%, var(--notte)); }
+.apertura .azione { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 20px var(--lato) 0; }
+.apertura .azione .tasto { min-height: 44px; padding: 0 20px; }
+.apertura .quando { color: rgba(255,255,255,.92); font-size: .9375rem; }
+.apertura .cosa, .apertura .quando { text-shadow: 0 1px 14px rgba(14,23,38,.34), 0 1px 2px rgba(14,23,38,.24); }
+@media (min-width: 900px) {
+  .apertura .cielo { height: clamp(500px, calc(100vh - 190px), 700px); height: clamp(500px, calc(100svh - 190px), 700px); }
+}
+@media (min-width: 600px) and (max-width: 899px) {
+  .apertura .scena { height: 580px; }
+  .apertura .mare { position: relative; z-index: 2; margin-top: -60px; background: linear-gradient(transparent 60px, var(--terra) 60px, var(--terra) 55%, var(--notte)); }
+  .apertura .azione { margin-top: 14px; }
+}
+@media (min-width: 900px) and (max-height: 860px) {
+  .apertura .cielo { height: clamp(500px, calc(100vh - 120px), 700px); height: clamp(500px, calc(100svh - 120px), 700px); }
+  .apertura .mare { position: relative; z-index: 2; margin-top: -70px; background: linear-gradient(transparent 70px, var(--terra) 70px, var(--terra) 55%, var(--notte)); }
+  .apertura .testa { padding-top: 18px; }
+  .apertura .marchio { gap: 14px; font-size: 2.125rem; }
+  .apertura .marchio img { width: 54px; height: 54px; }
+  .apertura h1 { margin-top: 18px; font-size: 3.5rem; }
+  .apertura .cosa { margin-top: 14px; font-size: 1.0625rem; }
+  .apertura .azione { margin-top: 16px; }
+}
+@media (max-width: 599px) {
+  .apertura .testa .tasto { display: none; }
+  .apertura .scena { height: 500px; margin-top: -170px; }
+  .apertura h1 { margin-top: 18px; }
+}
+.apertura { overflow-x: clip; }
+.apertura .telefono { position: relative; z-index: 2; margin: 0; min-width: 0; }
+.apertura .mare { display: grid; grid-template-columns: minmax(0, 1fr) 38%; column-gap: 18px; align-items: start; }
+.apertura .mare .cursore { grid-column: 1 / -1; }
+.apertura .mare .cursore { margin-top: -12px; }
+@media (min-width: 600px) and (max-width: 899px) { .apertura .mare .cursore { margin-top: 0; max-width: 734px; } }
+@media (min-width: 900px) { .apertura .mare .cursore { margin-top: -20px; } }
+.apertura .telefono { margin-top: 14px; }
+@media (min-width: 900px) {
+  .apertura .mare { grid-template-columns: minmax(0, 742px) minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 56px; }
+  .apertura .mare .cursore { grid-column: 1; }
+  .apertura .telefono { grid-column: 2; grid-row: 1 / 3; justify-self: end; width: clamp(220px, 21vw, 300px); height: 0; margin-top: var(--tel-y, 0px); }
+}
+.marchio { display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 1.25rem; letter-spacing: -0.01em; text-decoration: none; }
+.marchio img { width: 28px; height: 28px; border-radius: 22%; }
+.passi { display: grid; gap: 56px; margin-top: 56px; padding: 0; list-style: none; }
+.passo { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.passo svg { width: 100%; height: auto; overflow: hidden; }
+.n { display: block; color: var(--oro); font-weight: 300; font-size: 3.5rem; line-height: .9; letter-spacing: -0.03em; font-variant-numeric: lining-nums; }
+.passo .n { margin-top: 10px; }
+.passo h3, .visuale h3, .tre h3 { font-weight: 400; font-size: 1.5rem; line-height: 1.2; letter-spacing: -0.012em; }
+.passo p { color: var(--testo-2); max-width: 34ch; }
+.minuti { display: flex; gap: 1px; margin-top: 2px; }
+.minuti i { flex: 1; height: 10px; border-radius: 1px; background: var(--oro); }
+.minuti i.no { background: rgba(255,255,255,.22); }
+.minuti-scritte { display: flex; justify-content: space-between; color: var(--testo-3); font-size: .8125rem; font-variant-numeric: tabular-nums lining-nums; }
+.prova { --c1: #27406C; --c2: #5F77A3; --c3: #F2B07A; }
+.prova-cielo { background: linear-gradient(var(--c1) 0%, var(--c2) 46%, var(--c3) 100%); padding-top: 96px; }
+.prova-scena { position: relative; height: 320px; margin-top: 8px; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.prova-scena canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.prova-mare { padding-bottom: 96px; }
+.legenda { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 12px; color: var(--testo-3); font-size: .875rem; }
+.legenda span { display: inline-flex; align-items: center; gap: 7px; }
+.legenda i { width: 16px; height: 0; border-top: 1.5px dashed; }
+.legenda .velo { width: 16px; height: 9px; border: 0; border-radius: 5px 5px 1px 1px; background: rgba(255,255,255,.5); }
+.ora-verdetto { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 14px; }
+.ora { font-weight: 300; font-size: 3.75rem; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums lining-nums; }
+.verdetto { font-size: 1.75rem; line-height: 1.15; }
+.perche { margin-top: 6px; min-height: 2.9em; color: var(--testo-3); font-size: 1.0625rem; line-height: 1.45; }
+.cursore { position: relative; height: 44px; margin: 6px -11px 0; max-width: 742px; touch-action: pan-y; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.cursore svg { position: absolute; left: 11px; top: 0; width: calc(100% - 22px); height: 100%; overflow: visible; }
+.cursore input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; pointer-events: none; background: none; -webkit-appearance: none; appearance: none; }
+.cursore input::-webkit-slider-runnable-track { height: 100%; background: none; }
+.cursore input::-moz-range-track { background: none; }
+.cursore input::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: 11px; border-radius: 50%; background: var(--oro); box-shadow: 0 0 0 5px rgba(255,201,60,.22); transition: transform 140ms ease-out; }
+.cursore input::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: var(--oro); }
+.prova[data-fase=belowHorizon] .cursore input::-webkit-slider-thumb { background: transparent; box-shadow: inset 0 0 0 1.5px var(--oro); }
+.prova[data-fase=clouds] .cursore input::-webkit-slider-thumb { background: #D9DDE3; box-shadow: 0 0 0 5px rgba(255,255,255,.1); }
+.cursore.preso input::-webkit-slider-thumb { transform: scale(1.15); }
+.cursore input:focus-visible { outline: none; }
+.cursore input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--testo); outline-offset: 3px; }
+.nota { margin-top: 18px; color: var(--testo-3); font-size: .9375rem; max-width: 46ch; }
+.idea .salta { display: inline-block; margin-top: 18px; color: var(--testo-3); font-size: .9375rem; }
+.idea .salta a { color: var(--testo-2); }
+.idea-scena { display: block; width: 100%; height: auto; margin-top: 40px; overflow: hidden; }
+.idea-scena text { font-family: var(--testo-font); }
+.idea-nota { margin-top: 10px; color: var(--testo-3); font-size: .9375rem; }
+.idea-testi { display: grid; gap: 22px 56px; margin-top: 36px; }
+.idea-testi p { color: var(--testo-2); max-width: 40ch; }
+.idea-testi strong { color: var(--testo); font-weight: 500; }
+.credenziale { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--filo); color: var(--testo-3); font-size: 1rem; max-width: 62ch; }
+.credenziale a { color: var(--testo-2); }
+.iphone { position: relative; width: 100%; padding: 3.2%; border-radius: 15.5% / 7.2%; background: #070B13; box-shadow: 0 30px 56px -30px rgba(2,5,12,.95); }
+.iphone .vetro { position: relative; overflow: hidden; border-radius: 12.6% / 5.8%; background: #05080F; aspect-ratio: 1206 / 2622; }
+.iphone img, .iphone video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.iphone .vetro::before { content: ""; position: absolute; z-index: 2; top: 1.3%; left: 50%; width: 31%; height: 4.2%; transform: translateX(-50%); border-radius: 999px; background: #000; }
+.verso-sx { transform: rotate(-3deg); }
+.verso-dx { transform: rotate(3deg); }
+.visuali { display: grid; gap: 72px; margin-top: 56px; padding: 0; list-style: none; }
+.visuale { display: grid; gap: 30px; min-width: 0; }
+.visuale .testo { display: grid; gap: 12px; align-content: center; }
+.visuale p { color: var(--testo-2); max-width: 38ch; }
+.visuale p strong { color: var(--testo); font-weight: 500; }
+.schermo { position: relative; width: min(70%, 290px); margin: 0 auto; }
+.gioca { position: absolute; right: -6px; bottom: 6%; z-index: 4; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid rgba(255,255,255,.22); border-radius: 50%;
+  background: rgba(14,23,38,.62); color: var(--testo); cursor: pointer; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform 120ms ease-out; }
+.gioca[hidden] { display: none; }
+.gioca:active { transform: scale(.94); }
+.gioca svg { width: 16px; height: 16px; }
+.gioca .pausa, .gioca[data-va] .via { display: none; }
+.gioca[data-va] .pausa { display: block; }
+.tre { display: flex; gap: 20px; margin: 48px calc(-1 * var(--lato)) 0; padding: 0 var(--lato); list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--lato); scrollbar-width: none; }
+.tre::-webkit-scrollbar { display: none; }
+.tre li { flex: 0 0 min(66%, 260px); display: grid; gap: 10px; align-content: start; scroll-snap-align: start; }
+.tre .schermo { width: 100%; margin: 0 0 18px; }
+.tre p { color: var(--testo-2); font-size: 1.0625rem; }
+.gruppo { position: relative; width: min(100%, 380px); aspect-ratio: 1 / 1.3; margin: 48px auto 0; }
+.gruppo .iphone { position: absolute; width: 56%; }
+.gruppo .dietro { left: 2%; top: 0; filter: brightness(.86); transform: rotate(-7deg); }
+.gruppo .davanti { right: 2%; top: 6%; transform: rotate(4deg); }
+#app, .dove { background: var(--notte-2); }
+.mappe { display: grid; gap: 28px; margin-top: 48px; }
+.mappa { min-width: 0; }
+.mappa svg { display: block; width: 100%; height: auto; }
+.mappa figcaption { margin-top: 6px; color: var(--testo-3); font-size: .875rem; }
+.m-terra { fill: var(--terra-mappa); }
+.m-zona { fill: var(--oro); fill-opacity: .06; stroke: var(--oro); stroke-opacity: .75; stroke-width: 1.2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.m-ukv { fill-opacity: .14; stroke-dasharray: 4 3; }
+.m-nome { fill: var(--testo); font: 400 19px var(--testo-font); text-anchor: middle; paint-order: stroke; stroke: var(--notte-2); stroke-width: 4px; stroke-opacity: .6; }
+.m-nome.m-dx { text-anchor: end; }
+.modelli { margin-top: 44px; padding: 0; list-style: none; border-top: 1px solid var(--filo); }
+.modelli li { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "nome km" "chi chi" "zona zona"; gap: 2px 16px; padding: 16px 0; border-bottom: 1px solid var(--filo); }
+.modelli .nome { grid-area: nome; } .modelli .km { grid-area: km; } .modelli .chi { grid-area: chi; } .modelli .zona { grid-area: zona; }
+.modelli .nome { font-size: 1.375rem; font-weight: 500; letter-spacing: -0.01em; }
+.modelli .km { justify-self: end; font-size: 1.375rem; font-weight: 300; font-variant-numeric: tabular-nums lining-nums; }
+.modelli .chi, .modelli .zona { color: var(--testo-3); font-size: 1rem; }
+.modelli .zona { color: var(--testo-2); }
+.annunci { display: grid; gap: 40px; margin-top: 64px; }
+.annuncio { display: grid; gap: 14px; align-content: start; }
+.grande { font-weight: 300; font-size: 2.75rem; line-height: 1.02; letter-spacing: -0.028em; text-wrap: balance; }
+.grande strong { color: var(--oro); font-weight: 400; }
+.annuncio .sotto { color: var(--testo-2); max-width: 40ch; }
+.foto-vere h2 { max-width: 22ch; }
+.foto-testi { display: grid; gap: 14px; margin-top: 18px; color: var(--testo-2); }
+.scatti { display: grid; gap: 72px; margin-top: 48px; }
+.scatto { display: grid; gap: 28px; min-width: 0; }
+.scatto-foto { min-width: 0; margin: 0 calc(-1 * var(--lato)); }   
+.scatto-foto img { width: 100%; height: auto; }
+.scatto-foto figcaption { margin-top: 14px; padding: 0 var(--lato); color: var(--testo-2); font-size: .9375rem; font-weight: var(--p-etichette); letter-spacing: var(--tr-etichette); }
+.vista .iphone { width: min(66%, 270px); margin: 0 auto; }
+.vista .vetro picture { position: absolute; inset: 0; opacity: 0; transition: opacity 240ms ease-out; }
+.vista[data-vista=map] picture[data-v=map], .vista[data-vista=panorama] picture[data-v=panorama], .vista[data-vista=section] picture[data-v=section] { opacity: 1; }
+.viste { display: flex; gap: 2px; width: fit-content; margin: 16px auto 0; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1px var(--filo); }
+.viste[hidden] { display: none; }
+.viste button { min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--testo-2); font: var(--p-etichette) .9375rem/1 var(--testo-font); letter-spacing: var(--tr-etichette); cursor: pointer; transition: background-color 160ms ease-out, color 160ms ease-out; }
+.viste button:hover { color: var(--testo); }
+.viste button[aria-pressed=true] { background: rgba(255,255,255,.95); color: var(--notte); }
+.viste button:focus-visible { outline: 2px solid var(--testo); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .vista .vetro picture, .viste button { transition: none; } }
+@media (min-width: 900px) {
+  .foto-vere h2 { max-width: none; }
+  .foto-testi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; margin-top: 22px; font-size: 1.25rem; }
+  .scatti { gap: 96px; margin-top: 56px; }
+  .scatto { grid-template-columns: minmax(0, 1fr) clamp(236px, 19vw, 248px); gap: 0 56px; align-items: start; }
+  .scatto:nth-child(even) { grid-template-columns: clamp(236px, 19vw, 248px) minmax(0, 1fr); }
+  .scatto:nth-child(even) .vista { order: -1; }
+  .scatto-foto { margin: 0; }
+  .scatto-foto figcaption { padding: 0; }
+  .vista .iphone { width: 100%; }
+  .viste button { padding: 0 12px; font-size: .875rem; }
+}
+.autore { display: grid; gap: 32px; }
+.autore img { width: 100%; max-width: 360px; aspect-ratio: 1; object-fit: cover; }
+.autore blockquote { font-weight: 300; font-size: 1.625rem; line-height: 1.32; letter-spacing: -0.012em; max-width: 26ch; }
+.autore .firma { margin-top: 18px; color: var(--testo-3); font-size: 1rem; }
+.autore .firma b { color: var(--testo); font-weight: 500; }
+.autore .bio { margin-top: 22px; color: var(--testo-2); font-size: 1.0625rem; max-width: 46ch; }
+.lista { background: linear-gradient(var(--notte) 0%, var(--c1) 40%, var(--c2) 82%, var(--c3) 100%); }
+.lista .riga-pag { padding-block: 44px 88px; }
+.lista h2 { max-width: 14ch; }
+.modulo { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; max-width: 520px; }
+.modulo[hidden] { display: none; }
+.modulo input {
+  flex: 1 1 240px; min-width: 0; min-height: 48px; padding: 0 18px; border: 1px solid rgba(255,255,255,.4); border-radius: 999px;
+  background: rgba(14,23,38,.28); color: var(--testo); font: 400 1.0625rem var(--testo-font);
+}
+.modulo input::placeholder { color: rgba(255,255,255,.74); }
+.modulo .tasto { min-height: 48px; }
+.piccola { margin-top: 14px; color: var(--testo); font-size: .9375rem; }
+.grazie { margin-top: 18px; font-size: 1.25rem; }
+.miele { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.piede { padding-block: 40px 48px; color: var(--testo-3); font-size: .9375rem; }
+.piede nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; }
+.piede nav a { text-decoration: none; color: var(--testo-2); }
+.piede nav a:hover { color: var(--testo); }
+.lingue { margin-left: auto; display: inline-flex; gap: 6px; }
+.lingue [aria-current] { color: var(--testo); font-weight: 500; }
+.piede .ditta { margin-top: 22px; }
+@media (max-width: 599px) { .piede nav .marchio { flex-basis: 100%; } }
+@media (min-width: 720px) {
+  .passi { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+  .idea-testi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mappe { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: end; }
+  .autore { grid-template-columns: 360px minmax(0, 1fr); gap: 56px; align-items: center; }
+  .modelli li { grid-template-columns: 9rem 1fr 6rem minmax(0, 1.4fr); grid-template-areas: "nome chi km zona"; align-items: baseline; }
+  .modelli .km { justify-self: start; }
+  .modelli .chi, .modelli .zona { font-size: 1.0625rem; color: var(--testo-2); }
+  .tre { display: grid; grid-template-columns: repeat(3, minmax(0, 290px)); justify-content: space-between; gap: 40px; margin-inline: 0; padding: 0; overflow: visible; }
+  .tre .schermo { width: 100%; margin: 0 0 26px; }
+  .annunci { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; margin-top: 88px; }
+  .visuali { gap: 72px; margin-top: 56px; }
+  .visuale { grid-template-columns: minmax(0, 24rem) auto; justify-content: center; gap: 0 48px; align-items: center; }
+  .visuale:nth-child(even) { grid-template-columns: auto minmax(0, 24rem); }
+  .visuale:nth-child(even) .testo { order: 2; }
+  .schermo { width: 220px; }
+}
+@media (min-width: 900px) {
+  :root { --lato: 40px; }
+  .sezione { padding-block: 72px; }
+  #app { padding-bottom: 80px; }
+  h2 { font-size: 3.25rem; }
+  .intro { font-size: 1.25rem; }
+  .n { font-size: 4.5rem; }
+  .passo h3, .visuale h3, .tre h3 { font-size: 1.75rem; }
+  .prova-cielo { padding-top: 140px; }
+  .prova-scena { height: 470px; margin-top: 0; }
+  .prova-mare { padding-bottom: 140px; }
+  .autore blockquote { font-size: 2rem; }
+  .grande { font-size: 4rem; }
+  .lista .riga-pag { padding-block: 88px 112px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 56px; align-items: center; }
+  .lista .testo-lista { grid-column: 1; }
+  .gruppo { grid-column: 2; grid-row: 1; margin: 0 0 0 auto; width: min(440px, 100%); }
+  .visuali { gap: 48px; margin-top: -34px; }
+  .visuale { grid-template-columns: minmax(0, 27.5rem) auto; gap: 0 56px; }
+  .visuale:nth-child(even) { grid-template-columns: auto minmax(0, 27.5rem); }
+  .visuale p { max-width: none; }
+  .schermo { width: 240px; }
+}
+@media (min-width: 1200px) {
+  .visuali { gap: 0; margin-top: -50px; }
+  .visuale { grid-template-columns: minmax(0, 30rem) auto; justify-content: end; pointer-events: none; }
+  .visuale:nth-child(even) { grid-template-columns: auto minmax(0, 30rem); justify-content: start; }
+  .visuale > * { pointer-events: auto; }
+  .visuale + .visuale { margin-top: -180px; }
+  .schermo { width: 256px; }
+}
+@media (prefers-reduced-motion: reduce) { .tasto, .cursore input::-webkit-slider-thumb, .gioca { transition: none; } }
+</style>
+</head>
+<body>
+<div class="apertura">
+  <div class="cielo">
+    <header class="testa">
+      <a class="marchio" href="./"><img src="/icona.svg" alt="" width="68" height="68">NimbuScope</a>
+      <a class="tasto" href="#lista">Join the waitlist</a>
+    </header>
+    <h1>Will the light get through?</h1>
+    <p class="cosa">NimbuScope follows the sun’s ray through the forecast clouds and tells you, minute by minute, if sunrise and sunset light will reach the spot where you shoot.</p>
+    <p class="azione"><a class="tasto" href="#lista">Join the waitlist</a> <span class="quando">Coming soon on iPhone and Android</span></p>
+    <div class="scena" data-prova="area" role="img" aria-label="Side view of the sun’s ray over the curved Earth: it passes over a bank of mid clouds, gets blocked by it, then slips under it at sunset"><canvas></canvas></div>
+  </div>
+  <div class="mare">
+    <div class="cursore" data-prova="area" data-modo="assoluto" data-inset="13">
+      <svg aria-hidden="true"></svg>
+      <input type="range" id="minuto-apertura" data-prova="range" min="0" max="60" step="1" value="0" aria-label="Minute of the sunset">
+    </div>
+    <div class="lettura">
+      <p class="legenda" aria-hidden="true"><span><i style="color:var(--basse)"></i>low</span><span><i style="color:var(--medie)"></i>mid</span><span><i style="color:var(--alte)"></i>high clouds</span></p>
+      <p class="ora-verdetto"><span class="ora" data-prova="ora">16:52</span> <span class="verdetto">Direct light</span></p>
+      <p class="riga"></p>
+      <p class="nota">An example sunset over the sea, worked out the way the app does it. Drag the sky.</p>
+    </div>
+    <figure class="telefono"><div class="iphone verso-sx"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="NimbuScope on iPhone: the map at Neist Point with the line of the sun and the rings of the low, mid and high clouds; below, direct light at 16:34 and the slider" width="900" height="1957"></picture></div></div></figure>
+  </div>
+</div>
+<main>
+  <section class="sezione idea" id="idea">
+    <div class="riga-pag">
+      <p class="occhiello">The idea</p>
+      <h2>The clouds that hide a sunset are far away</h2>
+      <p class="salta">Already know cloud horizon distance? <a href="#come">Skip to the app</a></p>
+      <figure>
+        <svg class="idea-scena" data-scena="idea" role="img" aria-label="Side view: the curved Earth, your horizon, and where low, mid and high clouds meet it; a low cloud bank on the horizon stops the light of the setting sun"></svg>
+        <figcaption class="idea-nota">The dotted line is your horizon. A low bank where low clouds meet it stops the setting sun, under a clear sky.</figcaption>
+      </figure>
+      <div class="idea-testi">
+        <p>At sunrise and sunset the light reaches you almost flat, skimming the horizon. Because the Earth is curved, each cloud layer meets your horizon at its own distance. Seen from 40 m above the sea, <strong>low clouds</strong> meet it about 75–125 km away, <strong>mid clouds</strong> at 160–230 km, <strong>high clouds</strong> from about 280 km.</p>
+        <p>A bank sitting there, on the line of the sun, hides it even when the sky above you is clear. High clouds never block the sun: when the light gets under them, they light up. What counts is what lies on that line, layer by layer, minute by minute.</p>
+      </div>
+      <p class="credenziale">NimbuScope grows out of Clouds Horizon Distance, Francesco Gola’s free plugin for Windy. The app runs the same check for every minute, along the real ray and over the real terrain. On the blog: <a href="https://www.francescogola.net/tutorial/clouds-horizon-distance-the-plugin-for-windy-com-for-landscape-photography/">how the plugin works</a> and <a href="https://www.francescogola.net/tutorial/how-to-use-windy-com-for-landscape-photography/">how to use Windy for landscape photography</a>.</p>
+    </div>
+  </section>
+  <section class="sezione" id="come">
+    <div class="riga-pag">
+      <p class="occhiello">How it works</p>
+      <h2>From your spot to the sun, one minute at a time</h2>
+      <ol class="passi">
+        <li class="passo">
+          <svg data-scena="punto" viewBox="0 0 320 190" role="img" aria-label="A pin on the coast and the line toward the setting sun"></svg>
+          <span class="n" aria-hidden="true">1</span>
+          <h3>Pick your spot</h3>
+          <p>Drop a pin where you’ll set up the tripod. The app finds where the sun rises and sets from there.</p>
+        </li>
+        <li class="passo">
+          <svg data-scena="raggio" viewBox="0 0 320 190" role="img" aria-label="The ray from the sun crossing the low, mid and high cloud layers to the tripod"></svg>
+          <span class="n" aria-hidden="true">2</span>
+          <h3>Follow the ray</h3>
+          <p>NimbuScope traces the sun’s ray from your pin through the low, mid and high clouds of the forecast.</p>
+        </li>
+        <li class="passo">
+          <svg data-scena="fermo" viewBox="0 0 320 190" role="img" aria-label="The ray stopped by a bank of mid clouds before it reaches the tripod"></svg>
+          <span class="n" aria-hidden="true">3</span>
+          <h3>Read the verdict</h3>
+          <p>For every minute of sunrise and sunset, the app tells you if the light reaches you, and which clouds stop it when it doesn’t.</p>
+          <div aria-hidden="true">
+            <div class="minuti"><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="minuti-scritte"><span>15:14</span><span>sunset 16:44</span></div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+  <section class="sezione" id="app">
+    <div class="riga-pag">
+      <div class="app-testa">
+        <p class="occhiello">In the app</p>
+        <h2>One sunset, five views</h2>
+        <p class="intro">Five ways to read the same sunrise or sunset. Move the time and every view follows it, minute by minute.</p>
+      </div>
+      <ol class="visuali">
+        <li class="visuale">
+          <div class="testo"><span class="n" aria-hidden="true">1</span><h3>Map</h3><p>Your spot, the line of the sun and a ring for each cloud layer: where low, mid and high clouds meet your horizon. <strong>Move the time and the rings follow the sun</strong>, minute by minute. Show one layer at a time, or none, and check where rain is forecast.</p></div>
+          <figure class="schermo">
+            <div class="iphone verso-dx"><div class="vetro"><video muted loop playsinline preload="none" poster="app/video/01-mappa-poster.webp" aria-label="The map: your spot, the line of the sun and the rings of the low, mid and high clouds, which move with the time">
+              <source src="app/video/01-mappa.webm" type="video/webm"><source src="app/video/01-mappa.mp4" type="video/mp4">
+            </video></div></div>
+            <button class="gioca" type="button" hidden aria-label="Play video"><svg class="via" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6l7.6-4.8z" fill="currentColor"/></svg><svg class="pausa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z" fill="currentColor"/></svg></button>
+          </figure>
+        </li>
+        <li class="visuale">
+          <div class="testo"><span class="n" aria-hidden="true">2</span><h3>Panorama</h3><p><strong>The real view from your tripod</strong>, rebuilt from elevation data: the skyline toward the sun with its hills, mountains and islands, and the forecast clouds placed over it. Move the time and the sun slides along its true path. It shows where the sun goes down, behind land or sea, and until when you can see it.</p></div>
+          <figure class="schermo">
+            <div class="iphone verso-sx"><div class="vetro"><video muted loop playsinline preload="none" poster="app/video/02-panorama-poster.webp" aria-label="Panorama: the horizon toward the sun as seen from the tripod, with the forecast cloud layers over it and the sun moving as the time moves">
+              <source src="app/video/02-panorama.webm" type="video/webm"><source src="app/video/02-panorama.mp4" type="video/mp4">
+            </video></div></div>
+            <button class="gioca" type="button" hidden aria-label="Play video"><svg class="via" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6l7.6-4.8z" fill="currentColor"/></svg><svg class="pausa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z" fill="currentColor"/></svg></button>
+          </figure>
+        </li>
+        <li class="visuale">
+          <div class="testo"><span class="n" aria-hidden="true">3</span><h3>Section</h3><p>The ray seen from the side, over the curve of the Earth, the real terrain and the forecast clouds. <strong>The cut always points at the sun</strong>: as the sun moves, the section turns with it, and the ground and the clouds along it change. You see the light pass, or the exact cloud that stops it and how far away it is.</p></div>
+          <figure class="schermo">
+            <div class="iphone verso-dx"><div class="vetro"><video muted loop playsinline preload="none" poster="app/video/03-sezione-poster.webp" aria-label="Section: the ray seen from the side over the curved Earth, the terrain and the clouds, changing as the time moves">
+              <source src="app/video/03-sezione.webm" type="video/webm"><source src="app/video/03-sezione.mp4" type="video/mp4">
+            </video></div></div>
+            <button class="gioca" type="button" hidden aria-label="Play video"><svg class="via" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6l7.6-4.8z" fill="currentColor"/></svg><svg class="pausa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z" fill="currentColor"/></svg></button>
+          </figure>
+        </li>
+        <li class="visuale">
+          <div class="testo"><span class="n" aria-hidden="true">4</span><h3>Verdict and timeline</h3><p>Direct light or blocked, for every minute of sunrise and sunset. The orange band on the timeline marks the minutes of light. Times and rings adds sunset, the visible time and the distance of each layer.</p></div>
+          <figure class="schermo">
+            <div class="iphone verso-sx"><div class="vetro"><picture><source type="image/webp" srcset="app/04-verdetto-1620.webp"><img src="app/04-verdetto-1620.png" alt="The verdict, direct light, with the timeline, the times of the sunset and the distance of each cloud layer" width="900" height="1957" loading="lazy"></picture></div></div>
+          </figure>
+        </li>
+        <li class="visuale">
+          <div class="testo"><span class="n" aria-hidden="true">5</span><h3>Models</h3><p>Which forecast model the app uses at your spot, and what the others say. Here UKV at 2 km sees a bank of low clouds 46 km away that ICON-EU at 7 km doesn’t. <strong>Switch model and the verdict, the minutes of light and the clouds on the map change with it.</strong> Pick one yourself or leave it on automatic, which uses the finest model that covers your spot. The app also tells you when the next update arrives.</p></div>
+          <figure class="schermo">
+            <div class="iphone verso-dx"><div class="vetro"><video muted loop playsinline preload="none" poster="app/video/05-modelli-poster.webp" aria-label="Switching from UKV at 2 km to ICON-EU at 7 km: the verdict turns from blocked to direct light and the clouds on the map change, then back to automatic">
+              <source src="app/video/05-modelli.webm" type="video/webm"><source src="app/video/05-modelli.mp4" type="video/mp4">
+            </video></div></div>
+            <button class="gioca" type="button" hidden aria-label="Play video"><svg class="via" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6l7.6-4.8z" fill="currentColor"/></svg><svg class="pausa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z" fill="currentColor"/></svg></button>
+          </figure>
+        </li>
+      </ol>
+    </div>
+  </section>
+  <section class="sezione controllo" id="controllo">
+    <div class="riga-pag">
+      <p class="occhiello">The panel</p>
+      <h2>Everything under control</h2>
+      <p class="intro">On the map, the panel has three sizes. Swipe it down to see more of the map, swipe it up for every detail.</p>
+      <ol class="tre" tabindex="0" aria-label="The three sizes of the panel">
+        <li>
+          <figure class="schermo"><div class="iphone"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-1-minima-1634.webp"><img src="app/controllo-1-minima-1634.png" alt="The map with the panel lowered to a thin bar: the time, the verdict and the slider" width="900" height="1957" loading="lazy"></picture></div></div></figure>
+          <h3>Minimal</h3>
+          <p>A thin bar with the time, the verdict and the slider. The map gets almost the whole screen.</p>
+        </li>
+        <li>
+          <figure class="schermo"><div class="iphone"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="The map with the panel at its standard size: the time, the verdict, rain and the slider" width="900" height="1957" loading="lazy"></picture></div></div></figure>
+          <h3>Standard</h3>
+          <p>The time, the verdict with the clouds behind it, rain and the slider. Viewpoint opens the panorama and the section.</p>
+        </li>
+        <li>
+          <figure class="schermo"><div class="iphone"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-3-estesa-1634.webp"><img src="app/controllo-3-estesa-1634.png" alt="The map with the panel extended, the pin and the ring of the low clouds above it: the times of the sunset and the distance of each cloud layer" width="900" height="1957" loading="lazy"></picture></div></div></figure>
+          <h3>Extended</h3>
+          <p>Times and rings: sunset and the last minute you can see the sun, and how far away each cloud layer meets your horizon.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+  <section class="sezione dove" id="dove">
+    <div class="riga-pag">
+      <p class="occhiello">Coverage</p>
+      <h2>Where it works</h2>
+      <p class="intro">NimbuScope reads the cloud layers of three weather models. Each covers its own region, at its own resolution.</p>
+      <div class="mappe">
+        <figure class="mappa"><div data-mappa="europa"></div><figcaption>Europe, with the United Kingdom and Ireland at 2 km</figcaption></figure>
+        <figure class="mappa"><div data-mappa="america"></div><figcaption>United States</figcaption></figure>
+      </div>
+      <ul class="modelli">
+        <li><span class="nome">ICON-EU</span><span class="chi">Deutscher Wetterdienst</span><span class="km">7 km</span><span class="zona">Europe</span></li>
+        <li><span class="nome">UKV</span><span class="chi">Met Office</span><span class="km">2 km</span><span class="zona">United Kingdom and Ireland</span></li>
+        <li><span class="nome">HRRR</span><span class="chi">NOAA</span><span class="km">3 km</span><span class="zona">United States</span></li>
+      </ul>
+      <div class="annunci">
+        <p class="annuncio"><span class="grande">A new forecast <strong>every 3&nbsp;hours</strong></span> <span class="sotto">Eight updates a day, for ICON-EU, UKV and HRRR alike.</span></p>
+        <p class="annuncio"><span class="grande">New models are on the way</span> <span class="sotto">We’re constantly working to bring more weather models into NimbuScope: more places, finer detail.</span></p>
+      </div>
+    </div>
+  </section>
+  <section class="sezione foto-vere" id="foto">
+    <div class="riga-pag">
+      <p class="occhiello">From the field</p>
+      <h2>Shot before NimbuScope existed</h2>
+      <div class="foto-testi">
+        <p>These photos were taken before the app existed. We put the clouds of that moment into today’s engine and asked it the same question: would the light get through? It answers the way the camera did.</p>
+        <p>NimbuScope’s rules aren’t guesswork. We tuned them on real sunrises and sunsets, and we keep testing them against thousands of minutes of sunshine measured by weather stations, and against direct field observations.</p>
+      </div>
+      <div class="scatti">
+        <div class="scatto">
+          <figure class="scatto-foto">
+            <picture><source type="image/webp" srcset="foto/bedruthan-steps-2024-04-30-1200.webp 1200w, foto/bedruthan-steps-2024-04-30-2000.webp 2000w" sizes="(min-width: 1200px) 816px, (min-width: 900px) calc(100vw - 356px), 100vw"><img src="foto/bedruthan-steps-2024-04-30-1200.jpg" alt="Sunset at Bedruthan Steps: the sun low over the sea under the edge of a bank of clouds, a row of cumulus to the right, sea stacks and sea thrift on the cliff" width="1200" height="801" loading="lazy"></picture>
+            <figcaption>Bedruthan Steps, Cornwall · sunset</figcaption>
+          </figure>
+          <div class="vista" data-vista="panorama">
+            <div class="iphone"><div class="vetro">
+              <picture data-v="map" aria-hidden="true"><source type="image/webp" srcset="app/foto-bedruthan-mappa-2031.webp"><img src="app/foto-bedruthan-mappa-2031.png" alt="NimbuScope map at Bedruthan Steps: clouds drawn as squares of different density over the coast, the line of the sun and the rings of the low, mid and high clouds; direct light under the mid clouds" width="900" height="1957" loading="lazy"></picture>
+              <picture data-v="panorama"><source type="image/webp" srcset="app/foto-bedruthan-panorama-2031.webp"><img src="app/foto-bedruthan-panorama-2031.png" alt="Panorama from Bedruthan Steps: a bank of mid clouds fills the sky down to the horizon, and the sun sits in the clear band above the sea; direct light" width="900" height="1957" loading="lazy"></picture>
+              <picture data-v="section" aria-hidden="true"><source type="image/webp" srcset="app/foto-bedruthan-section-terra-2031.webp"><img src="app/foto-bedruthan-section-terra-2031.png" alt="Section toward the sun from Bedruthan Steps: the ray passes low over the sea, under a single thick block of low clouds beneath the bank of mid clouds" width="900" height="1957" loading="lazy"></picture>
+            </div></div>
+            <div class="viste" role="group" aria-label="View in the app" hidden><button type="button" data-v="map" aria-pressed="false">Map</button><button type="button" data-v="panorama" aria-pressed="true">Panorama</button><button type="button" data-v="section" aria-pressed="false">Section</button></div>
+          </div>
+        </div>
+        <div class="scatto">
+          <figure class="scatto-foto">
+            <picture><source type="image/webp" srcset="foto/tellaro-2021-11-02-1200.webp 1200w, foto/tellaro-2021-11-02-2000.webp 2000w" sizes="(min-width: 1200px) 816px, (min-width: 900px) calc(100vw - 356px), 100vw"><img src="foto/tellaro-2021-11-02-1200.jpg" alt="Sunrise at Tellaro: the village on its rocks under streaked low clouds, the sea smoothed by a long exposure" width="1200" height="800" loading="lazy"></picture>
+            <figcaption>Tellaro, Italy · sunrise</figcaption>
+          </figure>
+          <div class="vista" data-vista="panorama">
+            <div class="iphone"><div class="vetro">
+              <picture data-v="map" aria-hidden="true"><source type="image/webp" srcset="app/foto-tellaro-mappa-0717.webp"><img src="app/foto-tellaro-mappa-0717.png" alt="NimbuScope map at Tellaro: the line of the sun and the rings of the low and mid clouds; the sun behind the ridge, under the low clouds" width="900" height="1957" loading="lazy"></picture>
+              <picture data-v="panorama"><source type="image/webp" srcset="app/foto-tellaro-panorama-0717.webp"><img src="app/foto-tellaro-panorama-0717.png" alt="Panorama from Tellaro: the sun still behind the hill, under broken low clouds" width="900" height="1957" loading="lazy"></picture>
+              <picture data-v="section" aria-hidden="true"><source type="image/webp" srcset="app/foto-tellaro-section-0717.webp"><img src="app/foto-tellaro-section-0717.png" alt="Section toward the sun from Tellaro: the ridge 1.2 km away hides the sun, and the low clouds at 900 m sit above the ray" width="900" height="1957" loading="lazy"></picture>
+            </div></div>
+            <div class="viste" role="group" aria-label="View in the app" hidden><button type="button" data-v="map" aria-pressed="false">Map</button><button type="button" data-v="panorama" aria-pressed="true">Panorama</button><button type="button" data-v="section" aria-pressed="false">Section</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sezione" id="autore">
+    <div class="riga-pag autore">
+      <img src="foto/francesco-gola.jpg" alt="Francesco Gola" width="900" height="900" loading="lazy">
+      <div>
+        <p class="occhiello">Made by a photographer</p>
+        <blockquote>
+          <p>“I photograph the sea at sunrise and sunset. Forecasts told me how cloudy the sky would be, and I needed to know if the sun would reach my tripod. So I built NimbuScope.”</p>
+        </blockquote>
+        <p class="firma"><b>Francesco Gola</b>, seascape photographer</p>
+        <p class="bio">Francesco is a seascape photographer from Italy. For more than ten years he has taken people chasing the light along the sea cliffs of Europe and beyond, from the Lofoten Islands to the Cinque Terre. Before NimbuScope he built Clouds Horizon Distance, a free plugin for Windy. <a href="https://www.francescogola.net/">francescogola.net</a></p>
+      </div>
+    </div>
+  </section>
+  <section class="lista" id="lista">
+    <div class="riga-pag">
+      <div class="testo-lista">
+        <p class="occhiello">Waitlist</p>
+        <h2>Get NimbuScope first</h2>
+        <p class="intro">Coming soon on iPhone and Android. Leave your email and we’ll write to you the day it’s out.</p>
+        <form class="modulo" id="modulo" novalidate data-indirizzo="https://hvszphewzbhbxrtdbgdl.supabase.co/functions/v1/lista-attesa">
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="Your email" required aria-label="Your email" aria-describedby="consenso">
+          <label class="miele" aria-hidden="true">Leave this empty <input name="sito" type="text" tabindex="-1" autocomplete="off"></label>
+          <button class="tasto" type="submit">Join the waitlist</button>
+        </form>
+        <p class="piccola" id="avviso" role="alert" hidden></p>
+        <p class="piccola" id="consenso">Emails about the beta and the launch. No spam. <a href="/privacy/#the-nimbuscope-waitlist">Privacy</a></p>
+        <p class="grazie" id="grazie" role="status" hidden></p>
+      </div>
+      <figure class="gruppo" aria-label="NimbuScope on iPhone: the panorama from the tripod and the map">
+        <div class="iphone dietro"><div class="vetro"><picture><source type="image/webp" srcset="app/panorama-chiusura-1621.webp"><img src="app/panorama-chiusura-1621.png" alt="Panorama: the sun just above the skyline, under the bank of clouds, where it sets at 16:37" width="900" height="1957" loading="lazy"></picture></div></div>
+        <div class="iphone davanti"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="Map: your spot, the line of the sun and the rings of the cloud layers, direct light at 16:34" width="900" height="1957" loading="lazy"></picture></div></div>
+      </figure>
+    </div>
+  </section>
+</main>
+<footer class="piede">
+  <div class="riga-pag">
+    <nav aria-label="Footer">
+      <a class="marchio" href="./"><img src="/icona.svg" alt="" width="28" height="28">NimbuScope</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+    </nav>
+    <p class="ditta">© 2026 Bulb Mode SRL Semplificata · Via Ancona 15, 60035 Jesi (AN), Italy · VAT IT02730980428 · <a href="mailto:info@bulbmode.com">info@bulbmode.com</a> · Made by Francesco Gola</p>
+  </div>
+</footer>
+<script src="/js/esempio.js"></script>
+<script src="/js/prova.js"></script>
+<script src="/js/sezione.js"></script>
+<script src="/js/banner.js"></script>
+<script src="/js/mappe.js"></script>
+<script src="/js/pagina.js"></script>
+</body>
+</html>

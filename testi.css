@@ -1,0 +1,59 @@
+/* Le pagine di testo di nimbuscope.com (privacy, supporto, conferma della lista d'attesa, 404) nello stile della home: la notte
+   della Terra sotto una fascia di cielo, Red Hat, bianco su blu notte. Colori, caratteri e misure sono quelli di index.html */
+:root {
+  --notte: #0E1726; --c1: #27406C;
+  --testo: #FFFFFF; --testo-2: rgba(255,255,255,.84); --testo-3: rgba(255,255,255,.62); --filo: rgba(255,255,255,.14); --oro: #FFC64A;
+  --titolo: 'Red Hat Display', 'Helvetica Neue', Arial, sans-serif; --testo-font: 'Red Hat Text', 'Helvetica Neue', Arial, sans-serif;
+  --lato: 22px;
+  color-scheme: dark; font-synthesis: none;
+}
+* { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; background: var(--notte); }
+body { background: var(--notte); color: var(--testo); font: 400 1.0625rem/1.6 var(--testo-font); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+img { max-width: 100%; height: auto; display: block; }
+:focus-visible { outline: 2px solid var(--testo); outline-offset: 3px; border-radius: 4px; }
+p, li { text-wrap: pretty; }
+.riga-pag { max-width: calc(44rem + 2 * var(--lato)); margin: 0 auto; padding-left: max(var(--lato), env(safe-area-inset-left, 0px)); padding-right: max(var(--lato), env(safe-area-inset-right, 0px)); }
+
+/* la testata: il marchio a sinistra, le pagine a destra, sul cielo che scende nella notte */
+.testa { background: linear-gradient(var(--c1), var(--notte)); }
+.testa .riga-pag { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding-block: 18px 44px; }
+.marchio { display: inline-flex; align-items: center; gap: 10px; font: 700 1.25rem/1 var(--titolo); letter-spacing: -0.01em; text-decoration: none; }
+.marchio img { width: 28px; height: 28px; border-radius: 22%; }
+.testa nav { display: flex; gap: 18px; font-size: .9375rem; }
+.testa nav a { color: var(--testo-2); text-decoration: none; }
+.testa nav a:hover, .testa nav [aria-current] { color: var(--testo); }
+.testa nav [aria-current] { font-weight: 500; }
+
+/* il testo */
+main { padding-bottom: 72px; }
+h1 { font: 400 2.375rem/1.08 var(--titolo); letter-spacing: -0.03em; text-wrap: balance; }
+h2 { margin-top: 44px; font: 600 1.25rem/1.25 var(--titolo); letter-spacing: -0.005em; scroll-margin-top: 24px; }
+main p, main ul, main blockquote { margin-top: 14px; color: var(--testo-2); }
+main ul { padding-left: 1.2em; }
+main li + li { margin-top: 8px; }
+main strong { color: var(--testo); font-weight: 600; }
+blockquote { padding-left: 16px; border-left: 2px solid var(--oro); }
+main .lead { margin-top: 18px; color: var(--testo); font-size: 1.25rem; }
+.tasto {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border-radius: 999px;
+  background: rgba(255,255,255,.95); color: var(--notte); font: 600 1rem/1 var(--testo-font); text-decoration: none; transition: transform 120ms ease-out;
+}
+.tasto:active { transform: scale(.96); }
+.posta { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.posta strong { font-family: var(--titolo); font-size: 1.25rem; }
+
+/* il piede, come quello della home */
+.piede { border-top: 1px solid var(--filo); padding-block: 32px 48px; color: var(--testo-3); font-size: .9375rem; }
+.piede nav { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+.piede nav a { text-decoration: none; color: var(--testo-2); }
+.piede nav a:hover { color: var(--testo); }
+.piede .ditta { margin-top: 18px; }
+
+@media (min-width: 900px) {
+  .testa .riga-pag { padding-block: 26px 72px; }
+  h1 { font-size: 3.25rem; }
+  main { padding-bottom: 112px; }
+}
+@media (prefers-reduced-motion: reduce) { .tasto { transition: none; } }

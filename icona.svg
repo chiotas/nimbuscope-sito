@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<!-- NimbuScope (r1a «Due nuvole»): tu sulla Terra curva a sinistra, il sole basso a destra; il cuneo del disco e il raggio passano sotto le basse, le medie piu' in alto a destra. Fatto da fai.py -->
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12294D"/><stop offset="1" stop-color="#4F729F"/></linearGradient>
+<linearGradient id="sea" gradientUnits="userSpaceOnUse" x1="0" y1="780" x2="0" y2="1024"><stop offset="0" stop-color="#203E68"/><stop offset="1" stop-color="#0B1830"/></linearGradient>
+</defs>
+<rect width="1024" height="1024" fill="url(#sky)"/>
+<path d="M200 825L807 544L863 736Z" fill="#FFFFFF" opacity="0.2"/>
+<line x1="200" y1="825" x2="835" y2="640" stroke="#FFC46B" stroke-width="26" stroke-linecap="round"/>
+<circle cx="835" cy="640" r="100" fill="#FFC46B"/>
+<g fill="#7DB4FF"><circle cx="230" cy="462" r="86"/><circle cx="400" cy="434" r="106"/><circle cx="565" cy="437" r="78"/></g>
+<path d="M140 556A1375 1375 0 0 1 630 510" fill="none" stroke="#7DB4FF" stroke-width="122" stroke-linecap="round"/>
+<g fill="#E6ECF4"><circle cx="230" cy="462" r="80"/><circle cx="400" cy="434" r="100"/><circle cx="565" cy="437" r="72"/></g>
+<path d="M140 556A1375 1375 0 0 1 630 510" fill="none" stroke="#E6ECF4" stroke-width="110" stroke-linecap="round"/>
+<g fill="#B79CFF"><circle cx="655" cy="153" r="62"/><circle cx="760" cy="162" r="78"/><circle cx="845" cy="181" r="52"/></g>
+<path d="M580 201A1680 1680 0 0 1 860 236" fill="none" stroke="#B79CFF" stroke-width="96" stroke-linecap="round"/>
+<g fill="#E6ECF4"><circle cx="655" cy="153" r="56"/><circle cx="760" cy="162" r="72"/><circle cx="845" cy="181" r="46"/></g>
+<path d="M580 201A1680 1680 0 0 1 860 236" fill="none" stroke="#E6ECF4" stroke-width="84" stroke-linecap="round"/>
+<circle cx="512" cy="1880" r="1100" fill="url(#sea)"/>
+<circle cx="512" cy="1880" r="1100" fill="none" stroke="#6E8FBC" stroke-width="8"/>
+<circle cx="200" cy="825" r="42" fill="#F2F5FA"/>
+</svg>
