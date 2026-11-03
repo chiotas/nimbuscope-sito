@@ -7,6 +7,9 @@
 <meta name="description" content="NimbuScope follows the sun’s ray through the forecast clouds and tells you, minute by minute, if sunrise and sunset light will reach the spot where you shoot.">
 <meta name="theme-color" content="#27406C">
 <link rel="canonical" href="https://nimbuscope.com/">
+<link rel="alternate" hreflang="en" href="https://nimbuscope.com/">
+<link rel="alternate" hreflang="it" href="https://nimbuscope.com/it/">
+<link rel="alternate" hreflang="x-default" href="https://nimbuscope.com/">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
 <link rel="icon" href="/icona.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -16,6 +19,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="NimbuScope">
 <meta property="og:url" content="https://nimbuscope.com/">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="NimbuScope · Will the light get through?">
 <meta property="og:description" content="NimbuScope follows the sun’s ray through the forecast clouds and tells you, minute by minute, if sunrise and sunset light will reach the spot where you shoot.">
 <meta property="og:image" content="https://nimbuscope.com/og.jpg">
@@ -23,6 +27,14 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="NimbuScope: the sun’s ray over the curved Earth, under a bank of clouds at sunset">
 <meta name="twitter:card" content="summary_large_image">
+<script>(function () {
+  var k = 'nimbuscope-lingua', scelta = null, da = '';
+  try { scelta = localStorage.getItem(k); } catch (e) {}
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-lingua]'); if (a) try { localStorage.setItem(k, a.dataset.lingua); } catch (e) {} });
+  if (document.documentElement.lang !== 'en' || scelta || /[?&]lang=/.test(location.search)) return;
+  try { da = new URL(document.referrer).origin; } catch (e) {}
+  if (da !== location.origin && /^it\b/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '')) location.replace('/it/' + location.hash);
+})();</script>
 <style>
 :root {
   --notte: #0E1726; --notte-2: #142036; --terra-mappa: #2B3C5C;
@@ -73,6 +85,9 @@ p { text-wrap: pretty; }
 .apertura .marchio img { width: 48px; height: 48px; border-radius: 22.5%; box-shadow: 0 10px 22px -12px rgba(4,8,20,.7), 0 2px 6px -3px rgba(4,8,20,.45); }
 .apertura .tasto { display: inline-flex; align-items: center; min-height: 40px; padding: 0 17px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--terra); font-weight: var(--p-forte); font-size: 1rem; text-decoration: none; transition: transform 120ms ease-out; }
 .apertura .tasto:active { transform: scale(.96); }
+.apertura .testa .lingue { align-items: center; margin: 0 22px 0 auto; color: var(--testo3); font-size: 1rem; }
+.apertura .testa .lingue a { padding: 10px 3px; color: var(--testo2); text-decoration: none; }
+.apertura .testa .lingue a:hover, .apertura .testa .lingue [aria-current] { color: var(--bianco); }
 .apertura h1 { margin: 22px var(--lato) 0; font-weight: var(--p-titoli); font-size: 3rem; line-height: 1; letter-spacing: var(--tr-titoli); text-wrap: balance; }
 .apertura .cosa { margin: 14px var(--lato) 0; max-width: 30ch; color: var(--testo2); font-size: 1.0625rem; line-height: var(--interlinea-apertura); text-wrap: pretty; }
 .apertura .scena { position: relative; height: 520px; margin-top: -136px; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -141,6 +156,7 @@ p { text-wrap: pretty; }
 }
 @media (max-width: 599px) {
   .apertura .testa .tasto { display: none; }
+  .apertura .testa .lingue { margin-right: 0; }
   .apertura .scena { height: 500px; margin-top: -170px; }
   .apertura h1 { margin-top: 18px; }
 }
@@ -368,6 +384,7 @@ p { text-wrap: pretty; }
   <div class="cielo">
     <header class="testa">
       <a class="marchio" href="./"><img src="/icona.svg" alt="" width="68" height="68">NimbuScope</a>
+      <span class="lingue"><a href="./" aria-current="page" data-lingua="en">EN</a><span aria-hidden="true">/</span><a href="/it/" hreflang="it" lang="it" data-lingua="it">IT</a></span>
       <a class="tasto" href="#lista">Join the waitlist</a>
     </header>
     <h1>Will the light get through?</h1>
@@ -614,6 +631,7 @@ p { text-wrap: pretty; }
       <a class="marchio" href="./"><img src="/icona.svg" alt="" width="28" height="28">NimbuScope</a>
       <a href="/privacy/">Privacy</a>
       <a href="/support/">Support</a>
+      <span class="lingue"><a href="./" aria-current="page" data-lingua="en">EN</a><span aria-hidden="true">/</span><a href="/it/" hreflang="it" lang="it" data-lingua="it">IT</a></span>
     </nav>
     <p class="ditta">© 2026 Bulb Mode SRL Semplificata · Via Ancona 15, 60035 Jesi (AN), Italy · VAT IT02730980428 · <a href="mailto:info@bulbmode.com">info@bulbmode.com</a> · Made by Francesco Gola</p>
   </div>
