@@ -13,12 +13,21 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/testi.css">
+<script>(function () {
+  // l'inglese a chi non ha il browser in italiano, come la home; una scelta fatta a mano (stessa chiave della home) vince
+  var k = 'nimbuscope-lingua', scelta = null;
+  try { scelta = localStorage.getItem(k); } catch (e) {}
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-lingua]'); if (a) try { localStorage.setItem(k, a.dataset.lingua); } catch (e) {} });
+  if (location.hash) return;
+  var it = /^it\b/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '');
+  if (scelta ? scelta === 'en' : !it) location.replace('#en');
+})();</script>
 </head>
 <!-- class="in-arrivo": la beta non è ancora approvata da Apple e la pagina dice «arriva fra poco». Approvata, si toglie la classe -->
 <body>
 <header class="testa"><div class="riga-pag">
   <a class="marchio" href="/it/"><img src="/icona.svg" alt="" width="28" height="28">NimbuScope</a>
-  <nav class="lingua" aria-label="Lingua"><a class="solo-it" href="#en" hreflang="en" lang="en">English</a><a class="solo-en" href="#" hreflang="it">Italiano</a></nav>
+  <nav class="lingua" aria-label="Lingua"><a class="solo-it" href="#en" hreflang="en" lang="en" data-lingua="en">English</a><a class="solo-en" href="#" hreflang="it" data-lingua="it">Italiano</a></nav>
 </div></header>
 <main class="riga-pag">
 <section id="en" class="en" lang="en">
