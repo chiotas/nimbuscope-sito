@@ -57,3 +57,18 @@ main .lead { margin-top: 18px; color: var(--testo); font-size: 1.25rem; }
   main { padding-bottom: 112px; }
 }
 @media (prefers-reduced-motion: reduce) { .tasto { transition: none; } }
+
+/* le pagine della beta (/iphone/, /android/): l'italiano, e l'inglese con #en nell'indirizzo, senza script */
+.passi { margin-top: 36px; padding: 0; list-style: none; display: grid; gap: 36px; }
+.passi li { display: grid; grid-template-columns: 2.5rem 1fr; gap: 6px 14px; align-items: start; }
+.passi .n { grid-row: span 3; color: var(--oro); font: 600 3.5rem/.9 var(--titolo); letter-spacing: -0.03em; font-variant-numeric: lining-nums; }
+.passi h2 { margin-top: 4px; }
+.passi p { margin-top: 0; }
+.passi .tasto { justify-self: start; margin-top: 10px; }
+main .nota { margin-top: 12px; color: var(--testo-3); font-size: .9375rem; }
+.passi + .nota { margin-top: 40px; }
+.en:not(:target), .en:target ~ .it, .lingua .solo-en, :root:has(#en:target) .lingua .solo-it { display: none; }
+:root:has(#en:target) .lingua .solo-en { display: revert; }
+.en { scroll-margin-top: 100vh; }  /* con #en la pagina resta in cima, sotto la testata */
+.in-arrivo .pronta, .arriva { display: none; }
+.in-arrivo .arriva { display: block; }
