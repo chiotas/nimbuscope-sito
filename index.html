@@ -9,6 +9,15 @@
 <link rel="canonical" href="https://nimbuscope.com/">
 <link rel="alternate" hreflang="en" href="https://nimbuscope.com/">
 <link rel="alternate" hreflang="it" href="https://nimbuscope.com/it/">
+<link rel="alternate" hreflang="fr" href="https://nimbuscope.com/fr/">
+<link rel="alternate" hreflang="de" href="https://nimbuscope.com/de/">
+<link rel="alternate" hreflang="es" href="https://nimbuscope.com/es/">
+<link rel="alternate" hreflang="pt" href="https://nimbuscope.com/pt/">
+<link rel="alternate" hreflang="nb" href="https://nimbuscope.com/nb/">
+<link rel="alternate" hreflang="sv" href="https://nimbuscope.com/sv/">
+<link rel="alternate" hreflang="fi" href="https://nimbuscope.com/fi/">
+<link rel="alternate" hreflang="nl" href="https://nimbuscope.com/nl/">
+<link rel="alternate" hreflang="da" href="https://nimbuscope.com/da/">
 <link rel="alternate" hreflang="x-default" href="https://nimbuscope.com/">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64">
 <link rel="icon" href="/icona.svg" type="image/svg+xml">
@@ -28,12 +37,21 @@
 <meta property="og:image:alt" content="NimbuScope: the sun’s ray over the curved Earth, under a bank of clouds at sunset">
 <meta name="twitter:card" content="summary_large_image">
 <script>(function () {
-  var k = 'nimbuscope-lingua', scelta = null, da = '';
+  var k = 'nimbuscope-lingua', scelta = null, da = '', ci = ["en", "it", "fr", "de", "es", "pt", "nb", "sv", "fi", "nl", "da"], vuole;
   try { scelta = localStorage.getItem(k); } catch (e) {}
-  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-lingua]'); if (a) try { localStorage.setItem(k, a.dataset.lingua); } catch (e) {} });
-  if (document.documentElement.lang !== 'en' || scelta || /[?&]lang=/.test(location.search)) return;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-lingua]'); if (a) try { localStorage.setItem(k, a.dataset.lingua); } catch (e) {}
+    document.querySelectorAll('details.lingue[open]').forEach(function (d) { if (!d.contains(e.target)) d.open = false; });
+  });
+  if (document.documentElement.lang !== 'en' || /[?&]lang=/.test(location.search)) return;
   try { da = new URL(document.referrer).origin; } catch (e) {}
-  if (da !== location.origin && /^it\b/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '')) location.replace('/it/' + location.hash);
+  if (da === location.origin) return;
+  vuole = ci.indexOf(scelta) >= 0 ? scelta : null;
+  if (!vuole) (navigator.languages || [navigator.language || '']).some(function (l) {
+    l = String(l).toLowerCase().split('-')[0]; if (l === 'no' || l === 'nn') l = 'nb';
+    return ci.indexOf(l) >= 0 && (vuole = l);
+  });
+  if (vuole && vuole !== 'en') location.replace('/' + vuole + '/' + location.hash);
 })();</script>
 <style>
 :root {
@@ -80,14 +98,13 @@ p { text-wrap: pretty; }
 .apertura { --c1: #27406C; --c2: #5D74A0; --c3: #F0AE78; --terra: #0E1726; --bianco: #FFFFFF; --testo2: rgba(255,255,255,.84); --testo3: rgba(255,255,255,.62); --lato: 22px; --basse: #7DB4FF; --medie: #B79CFF; --alte: #FF8FA3; color-scheme: dark; }
 .apertura .cielo { position: relative; background: linear-gradient(var(--c1) 0%, var(--c2) 52%, var(--c3) 100%); }
 .apertura .cielo > :not(.scena) { position: relative; z-index: 1; }
+.apertura .cielo > .testa { z-index: 2; }   
 .apertura .testa { display: flex; align-items: center; justify-content: space-between; padding: 16px var(--lato) 0; }
 .apertura .marchio { display: inline-flex; align-items: center; gap: 14px; font-weight: var(--p-marchio); font-size: 1.875rem; line-height: 1; letter-spacing: -0.02em; text-decoration: none; }
 .apertura .marchio img { width: 48px; height: 48px; border-radius: 22.5%; box-shadow: 0 10px 22px -12px rgba(4,8,20,.7), 0 2px 6px -3px rgba(4,8,20,.45); }
 .apertura .tasto { display: inline-flex; align-items: center; min-height: 40px; padding: 0 17px; border-radius: 999px; background: rgba(255,255,255,.94); color: var(--terra); font-weight: var(--p-forte); font-size: 1rem; text-decoration: none; transition: transform 120ms ease-out; }
 .apertura .tasto:active { transform: scale(.96); }
-.apertura .testa .lingue { align-items: center; margin: 0 22px 0 auto; color: var(--testo3); font-size: 1rem; }
-.apertura .testa .lingue a { padding: 10px 3px; color: var(--testo2); text-decoration: none; }
-.apertura .testa .lingue a:hover, .apertura .testa .lingue [aria-current] { color: var(--bianco); }
+.apertura .testa .lingue { margin: 0 22px 0 auto; font-size: 1rem; }
 .apertura h1 { margin: 22px var(--lato) 0; font-weight: var(--p-titoli); font-size: 3rem; line-height: 1; letter-spacing: var(--tr-titoli); text-wrap: balance; }
 .apertura .cosa { margin: 14px var(--lato) 0; max-width: 30ch; color: var(--testo2); font-size: 1.0625rem; line-height: var(--interlinea-apertura); text-wrap: pretty; }
 .apertura .scena { position: relative; height: 520px; margin-top: -136px; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -325,8 +342,18 @@ p { text-wrap: pretty; }
 .piede nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; }
 .piede nav a { text-decoration: none; color: var(--testo-2); }
 .piede nav a:hover { color: var(--testo); }
-.lingue { margin-left: auto; display: inline-flex; gap: 6px; }
-.lingue [aria-current] { color: var(--testo); font-weight: 500; }
+.lingue { position: relative; margin-left: auto; }
+.lingue summary { display: flex; align-items: center; gap: 8px; padding: 10px 3px; color: var(--testo-2); cursor: pointer; list-style: none; }
+.lingue summary::-webkit-details-marker { display: none; }
+.lingue summary::after { content: ""; width: 5px; height: 5px; margin-top: -3px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.lingue[open] summary::after { margin-top: 3px; transform: rotate(-135deg); }
+.lingue summary:hover, .lingue[open] summary { color: var(--testo); }
+.lingue ul { position: absolute; z-index: 30; right: 0; top: 100%; min-width: 11rem; margin: 6px 0 0; padding: 8px 0; list-style: none;
+  background: #0e1726; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.4); }
+.lingue li a { display: block; padding: 9px 22px; color: var(--testo-2); text-decoration: none; white-space: nowrap; }
+.lingue li a:hover { color: var(--testo); background: rgba(255,255,255,.06); }
+.lingue li [aria-current] { color: var(--testo); font-weight: 500; }
+.piede .lingue ul { top: auto; bottom: 100%; margin: 0 0 6px; }
 .piede .ditta { margin-top: 22px; }
 @media (max-width: 599px) { .piede nav .marchio { flex-basis: 100%; } }
 @media (min-width: 720px) {
@@ -384,7 +411,7 @@ p { text-wrap: pretty; }
   <div class="cielo">
     <header class="testa">
       <a class="marchio" href="./"><img src="/icona.svg" alt="" width="68" height="68">NimbuScope</a>
-      <span class="lingue"><a href="./" aria-current="page" data-lingua="en">EN</a><span aria-hidden="true">/</span><a href="/it/" hreflang="it" lang="it" data-lingua="it">IT</a></span>
+      <details class="lingue"><summary aria-label="Language: English">EN</summary><ul><li><a href="/" hreflang="en" lang="en" data-lingua="en" aria-current="page">English</a></li><li><a href="/it/" hreflang="it" lang="it" data-lingua="it">Italiano</a></li><li><a href="/fr/" hreflang="fr" lang="fr" data-lingua="fr">Français</a></li><li><a href="/de/" hreflang="de" lang="de" data-lingua="de">Deutsch</a></li><li><a href="/es/" hreflang="es" lang="es" data-lingua="es">Español</a></li><li><a href="/pt/" hreflang="pt" lang="pt" data-lingua="pt">Português</a></li><li><a href="/nb/" hreflang="nb" lang="nb" data-lingua="nb">Norsk</a></li><li><a href="/sv/" hreflang="sv" lang="sv" data-lingua="sv">Svenska</a></li><li><a href="/fi/" hreflang="fi" lang="fi" data-lingua="fi">Suomi</a></li><li><a href="/nl/" hreflang="nl" lang="nl" data-lingua="nl">Nederlands</a></li><li><a href="/da/" hreflang="da" lang="da" data-lingua="da">Dansk</a></li></ul></details>
       <a class="tasto" href="#lista">Join the waitlist</a>
     </header>
     <h1>Will the light get through?</h1>
@@ -399,11 +426,11 @@ p { text-wrap: pretty; }
     </div>
     <div class="lettura">
       <p class="legenda" aria-hidden="true"><span><i style="color:var(--basse)"></i>low</span><span><i style="color:var(--medie)"></i>mid</span><span><i style="color:var(--alte)"></i>high clouds</span></p>
-      <p class="ora-verdetto"><span class="ora" data-prova="ora">16:52</span> <span class="verdetto">Direct light</span></p>
+      <p class="ora-verdetto"><span class="ora" data-prova="ora">16:52</span> <span class="verdetto">Nothing blocking</span></p>
       <p class="riga"></p>
       <p class="nota">An example sunset over the sea, worked out the way the app does it. Drag the sky.</p>
     </div>
-    <figure class="telefono"><div class="iphone verso-sx"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="NimbuScope on iPhone: the map at Neist Point with the line of the sun and the rings of the low, mid and high clouds; below, direct light at 16:34 and the slider" width="900" height="1957"></picture></div></div></figure>
+    <figure class="telefono"><div class="iphone verso-sx"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="NimbuScope on iPhone: the map at Neist Point with the line of the sun and the rings of the low, mid and high clouds; below, nothing blocking at 16:34 and the slider" width="900" height="1957"></picture></div></div></figure>
   </div>
 </div>
 <main>
@@ -489,15 +516,15 @@ p { text-wrap: pretty; }
           </figure>
         </li>
         <li class="visuale">
-          <div class="testo"><span class="n" aria-hidden="true">4</span><h3>Verdict and timeline</h3><p>Direct light or blocked, for every minute of sunrise and sunset. The orange band on the timeline marks the minutes of light. Times and rings adds sunset, the visible time and the distance of each layer.</p></div>
+          <div class="testo"><span class="n" aria-hidden="true">4</span><h3>Verdict and timeline</h3><p>Nothing blocking, or where the sun is blocked, for every minute of sunrise and sunset. The orange band on the timeline marks the minutes with nothing blocking. Times and rings adds sunset, the visible time and the distance of each layer.</p></div>
           <figure class="schermo">
-            <div class="iphone verso-sx"><div class="vetro"><picture><source type="image/webp" srcset="app/04-verdetto-1620.webp"><img src="app/04-verdetto-1620.png" alt="The verdict, direct light, with the timeline, the times of the sunset and the distance of each cloud layer" width="900" height="1957" loading="lazy"></picture></div></div>
+            <div class="iphone verso-sx"><div class="vetro"><picture><source type="image/webp" srcset="app/04-verdetto-1620.webp"><img src="app/04-verdetto-1620.png" alt="The verdict, nothing blocking, with the timeline, the times of the sunset and the distance of each cloud layer" width="900" height="1957" loading="lazy"></picture></div></div>
           </figure>
         </li>
         <li class="visuale">
           <div class="testo"><span class="n" aria-hidden="true">5</span><h3>Models</h3><p>Which forecast model the app uses at your spot, and what the others say. Here UKV at 2 km sees a bank of low clouds 46 km away that ICON-EU at 7 km doesn’t. <strong>Switch model and the verdict, the minutes of light and the clouds on the map change with it.</strong> Pick one yourself or leave it on automatic, which uses the finest model that covers your spot. The app also tells you when the next update arrives.</p></div>
           <figure class="schermo">
-            <div class="iphone verso-dx"><div class="vetro"><video muted loop playsinline preload="none" poster="app/video/05-modelli-poster.webp" aria-label="Switching from UKV at 2 km to ICON-EU at 7 km: the verdict turns from blocked to direct light and the clouds on the map change, then back to automatic">
+            <div class="iphone verso-dx"><div class="vetro"><video muted loop playsinline preload="none" poster="app/video/05-modelli-poster.webp" aria-label="Switching from UKV at 2 km to ICON-EU at 7 km: the verdict turns from blocked to nothing blocking and the clouds on the map change, then back to automatic">
               <source src="app/video/05-modelli.webm" type="video/webm"><source src="app/video/05-modelli.mp4" type="video/mp4">
             </video></div></div>
             <button class="gioca" type="button" hidden aria-label="Play video"><svg class="via" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6l7.6-4.8z" fill="currentColor"/></svg><svg class="pausa" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.4 3h2.6v10H4.4zM9 3h2.6v10H9z" fill="currentColor"/></svg></button>
@@ -566,8 +593,8 @@ p { text-wrap: pretty; }
           </figure>
           <div class="vista" data-vista="panorama">
             <div class="iphone"><div class="vetro">
-              <picture data-v="map" aria-hidden="true"><source type="image/webp" srcset="app/foto-bedruthan-mappa-2031.webp"><img src="app/foto-bedruthan-mappa-2031.png" alt="NimbuScope map at Bedruthan Steps: clouds drawn as squares of different density over the coast, the line of the sun and the rings of the low, mid and high clouds; direct light under the mid clouds" width="900" height="1957" loading="lazy"></picture>
-              <picture data-v="panorama"><source type="image/webp" srcset="app/foto-bedruthan-panorama-2031.webp"><img src="app/foto-bedruthan-panorama-2031.png" alt="Panorama from Bedruthan Steps: a bank of mid clouds fills the sky down to the horizon, and the sun sits in the clear band above the sea; direct light" width="900" height="1957" loading="lazy"></picture>
+              <picture data-v="map" aria-hidden="true"><source type="image/webp" srcset="app/foto-bedruthan-mappa-2031.webp"><img src="app/foto-bedruthan-mappa-2031.png" alt="NimbuScope map at Bedruthan Steps: clouds drawn as squares of different density over the coast, the line of the sun and the rings of the low, mid and high clouds; nothing blocking, under the mid clouds" width="900" height="1957" loading="lazy"></picture>
+              <picture data-v="panorama"><source type="image/webp" srcset="app/foto-bedruthan-panorama-2031.webp"><img src="app/foto-bedruthan-panorama-2031.png" alt="Panorama from Bedruthan Steps: a bank of mid clouds fills the sky down to the horizon, and the sun sits in the clear band above the sea; nothing blocking" width="900" height="1957" loading="lazy"></picture>
               <picture data-v="section" aria-hidden="true"><source type="image/webp" srcset="app/foto-bedruthan-section-terra-2031.webp"><img src="app/foto-bedruthan-section-terra-2031.png" alt="Section toward the sun from Bedruthan Steps: the ray passes low over the sea, under a single thick block of low clouds beneath the bank of mid clouds" width="900" height="1957" loading="lazy"></picture>
             </div></div>
             <div class="viste" role="group" aria-label="View in the app" hidden><button type="button" data-v="map" aria-pressed="false">Map</button><button type="button" data-v="panorama" aria-pressed="true">Panorama</button><button type="button" data-v="section" aria-pressed="false">Section</button></div>
@@ -620,7 +647,7 @@ p { text-wrap: pretty; }
       </div>
       <figure class="gruppo" aria-label="NimbuScope on iPhone: the panorama from the tripod and the map">
         <div class="iphone dietro"><div class="vetro"><picture><source type="image/webp" srcset="app/panorama-chiusura-1621.webp"><img src="app/panorama-chiusura-1621.png" alt="Panorama: the sun just above the skyline, under the bank of clouds, where it sets at 16:37" width="900" height="1957" loading="lazy"></picture></div></div>
-        <div class="iphone davanti"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="Map: your spot, the line of the sun and the rings of the cloud layers, direct light at 16:34" width="900" height="1957" loading="lazy"></picture></div></div>
+        <div class="iphone davanti"><div class="vetro"><picture><source type="image/webp" srcset="app/controllo-2-normale-1634.webp"><img src="app/controllo-2-normale-1634.png" alt="Map: your spot, the line of the sun and the rings of the cloud layers, nothing blocking at 16:34" width="900" height="1957" loading="lazy"></picture></div></div>
       </figure>
     </div>
   </section>
@@ -631,7 +658,7 @@ p { text-wrap: pretty; }
       <a class="marchio" href="./"><img src="/icona.svg" alt="" width="28" height="28">NimbuScope</a>
       <a href="/privacy/">Privacy</a>
       <a href="/support/">Support</a>
-      <span class="lingue"><a href="./" aria-current="page" data-lingua="en">EN</a><span aria-hidden="true">/</span><a href="/it/" hreflang="it" lang="it" data-lingua="it">IT</a></span>
+      <details class="lingue"><summary aria-label="Language: English">EN</summary><ul><li><a href="/" hreflang="en" lang="en" data-lingua="en" aria-current="page">English</a></li><li><a href="/it/" hreflang="it" lang="it" data-lingua="it">Italiano</a></li><li><a href="/fr/" hreflang="fr" lang="fr" data-lingua="fr">Français</a></li><li><a href="/de/" hreflang="de" lang="de" data-lingua="de">Deutsch</a></li><li><a href="/es/" hreflang="es" lang="es" data-lingua="es">Español</a></li><li><a href="/pt/" hreflang="pt" lang="pt" data-lingua="pt">Português</a></li><li><a href="/nb/" hreflang="nb" lang="nb" data-lingua="nb">Norsk</a></li><li><a href="/sv/" hreflang="sv" lang="sv" data-lingua="sv">Svenska</a></li><li><a href="/fi/" hreflang="fi" lang="fi" data-lingua="fi">Suomi</a></li><li><a href="/nl/" hreflang="nl" lang="nl" data-lingua="nl">Nederlands</a></li><li><a href="/da/" hreflang="da" lang="da" data-lingua="da">Dansk</a></li></ul></details>
     </nav>
     <p class="ditta">© 2026 Bulb Mode SRL Semplificata · Via Ancona 15, 60035 Jesi (AN), Italy · VAT IT02730980428 · <a href="mailto:info@bulbmode.com">info@bulbmode.com</a> · Made by Francesco Gola</p>
   </div>
