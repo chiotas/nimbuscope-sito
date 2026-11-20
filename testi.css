@@ -72,3 +72,89 @@ main .nota { margin-top: 12px; color: var(--testo-3); font-size: .9375rem; }
 .en { scroll-margin-top: 100vh; }  /* con #en la pagina resta in cima, sotto la testata */
 .in-arrivo .pronta, .arriva { display: none; }
 .in-arrivo .arriva { display: block; }
+
+/* la guida rapida (/guide/, /it/guide/, da docs/guida con pubblica.py): otto voci, ognuna col suo scatto accanto, a lati alterni come
+   le visuali della home; il telefono e' la cornice piatta della home (nera, opaca, un'ombra sola), dritto. La prima voce ha il disegno
+   largo sotto il testo, l'ultima sta su una fascia con le tre cose a schede */
+.guida { --notte-2: #142036; --raggio: #FFAE42; --basse: #7DB4FF; }
+.guida .riga-pag { max-width: calc(52rem + 2 * var(--lato)); }
+.guida main { padding-bottom: 0; }
+.guida h1 + .lead { max-width: 36rem; }
+.voce { display: grid; gap: 32px; margin-top: 80px; }
+.voce .testo { min-width: 0; }
+.voce .n { display: block; color: var(--oro); font: 600 3.5rem/.9 var(--titolo); letter-spacing: -0.03em; font-variant-numeric: lining-nums; }
+.voce h2 { margin-top: 14px; font: 600 1.5rem/1.2 var(--titolo); letter-spacing: -0.01em; text-wrap: balance; }
+.voce em { font-style: normal; color: var(--testo); }
+.voce figure { margin: 0; min-width: 0; }
+.voce figcaption { margin: 14px auto 0; max-width: 17rem; color: var(--testo-3); font-size: .875rem; line-height: 1.45; text-align: center; text-wrap: balance; }
+
+/* le liste: i quattro punti coi numeri d'oro come sullo scatto, i verdetti fra due fili */
+.voce ol { margin-top: 18px; padding: 0; list-style: none; counter-reset: punto; display: grid; gap: 10px; color: var(--testo-2); }
+.voce ol li { counter-increment: punto; position: relative; padding-left: 36px; }
+.voce ol li::before { content: counter(punto); position: absolute; left: 0; top: 1px; }
+.voce ol li::before, .tel .pin { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--oro); color: var(--notte); font: 600 .8125rem/1 var(--testo-font); }
+.voce:not(.fascia) ul { margin-top: 18px; padding: 0; list-style: none; border-bottom: 1px solid var(--filo); }
+.voce:not(.fascia) ul li { margin: 0; padding: 10px 0; border-top: 1px solid var(--filo); }
+
+/* il telefono: lo scatto vero, o il segnaposto finche' lo scatto manca */
+.schermo .tel { position: relative; width: min(70%, 260px); margin: 0 auto; padding: 3.2%; border-radius: 15.5% / 7.2%; background: #070B13; box-shadow: 0 30px 56px -30px rgba(2,5,12,.95); }
+.tel .vetro { position: relative; aspect-ratio: 1206 / 2622; border-radius: 12.6% / 5.8%; background: #05080F; }
+.tel .vetro > img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.tel .vetro::before { content: ""; position: absolute; z-index: 2; top: 1.3%; left: 50%; width: 31%; height: 4.2%; transform: translateX(-50%); border-radius: 999px; background: #000; }
+.tel .pin { position: absolute; z-index: 3; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px rgba(14,23,38,.85); }
+.segnaposto .vetro { display: grid; place-content: center; justify-items: center; gap: 14px; padding: 0 14%; background: linear-gradient(var(--c1), var(--notte) 70%); text-align: center; }
+.segnaposto .vetro > img { width: 44px; height: 44px; border-radius: 22%; opacity: .9; }
+.segnaposto span { color: var(--testo-2); font: 500 .9375rem/1.35 var(--titolo); text-wrap: balance; }
+
+/* i ritagli del pannello, uno sotto l'altro */
+.pannelli { display: grid; gap: 10px; width: min(100%, 320px); margin-inline: auto !important; }
+.pannelli img { width: 100%; aspect-ratio: 1162 / 896; border-radius: 4.8% / 6.2%; background: #05080F; }
+
+/* il disegno del raggio: la geometria vera (docs/guida/media/raggio-*.svg), nei colori della home */
+.disegno { padding: 18px 18px 12px; border-radius: 16px; background: var(--notte-2); }
+.disegno svg { display: block; width: 100%; height: auto; overflow: visible; }
+.disegno .terra { fill: #1A2A47; }
+.disegno .quota { fill: none; stroke: rgba(255,255,255,.32); stroke-width: 1; stroke-dasharray: 2 4; }
+.disegno .nv { fill: #FFFFFF; }
+.disegno .lv-basse { stroke: var(--basse); stroke-width: 2; stroke-dasharray: 4 3; }
+.disegno .raggio { stroke: var(--raggio); stroke-width: 2.2; stroke-linecap: round; }
+.disegno .sole { fill: var(--oro); }
+.disegno .alone { fill: rgba(255,198,74,.18); }
+.disegno .punto { fill: var(--notte); stroke: var(--raggio); stroke-width: 1.6; }
+.disegno .tu { fill: #D9E2F2; }
+.disegno .tacca { stroke: rgba(255,255,255,.4); }
+.disegno .et { font: 500 10px var(--testo-font); fill: rgba(255,255,255,.82); }
+.disegno .c { text-anchor: middle; }
+.disegno .km { fill: rgba(255,255,255,.6); }
+.disegno .basse { fill: var(--basse); }
+.disegno figcaption { margin-top: 10px; max-width: none; }
+
+/* l'ultima voce, senza scatto: su una fascia, le tre cose a schede */
+.voce.fascia { padding-block: 56px; background: var(--notte-2); box-shadow: 0 0 0 100vmax var(--notte-2); clip-path: inset(0 -100vmax); }
+.fascia ul { margin-top: 24px; padding: 0; list-style: none; display: grid; gap: 14px; }
+.fascia li { margin: 0; padding: 18px 20px; border: 1px solid var(--filo); border-radius: 16px; color: var(--testo-2); }
+.saluto { margin: 0; padding-block: 56px 64px; text-align: center; color: var(--testo) !important; font: 400 2rem/1.1 var(--titolo); letter-spacing: -0.02em; }
+
+/* al telefono il disegno da un bordo all'altro, con le scritte piu' grandi (la nota sotto la base resta nella didascalia) */
+@media (max-width: 599px) {
+  .disegno { margin-inline: calc(-1 * var(--lato)); padding-inline: 0; border-radius: 0; }
+  .disegno .et { font-size: 18px; }
+  .disegno .fac { display: none; }
+  .disegno figcaption { padding-inline: var(--lato); }
+}
+@media (min-width: 760px) {
+  .voce { grid-template-columns: minmax(0, 1fr) 240px; gap: 0 64px; align-items: center; margin-top: 96px; }
+  .voce:nth-of-type(even) { grid-template-columns: 240px minmax(0, 1fr); }
+  .voce:nth-of-type(even) .testo { order: 2; }
+  .voce.larga, .voce.fascia { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .voce.larga .testo { max-width: 36rem; }
+  .schermo .tel { width: 100%; }
+  .pannelli { width: 100%; }
+  .fascia ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .voce .n { font-size: 4rem; }
+  .voce h2 { font-size: 1.75rem; }
+}
+@media (min-width: 900px) {
+  .guida main { padding-bottom: 0; }
+  .saluto { padding-block: 72px 80px; font-size: 2.5rem; }
+}
