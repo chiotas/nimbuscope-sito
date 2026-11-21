@@ -83,6 +83,7 @@ main .nota { margin-top: 12px; color: var(--testo-3); font-size: .9375rem; }
 .voce { display: grid; gap: 32px; margin-top: 80px; }
 .voce .testo { min-width: 0; }
 .voce .n { display: block; color: var(--oro); font: 600 3.5rem/.9 var(--titolo); letter-spacing: -0.03em; font-variant-numeric: lining-nums; }
+.voce .n.esempio { font-size: 1.75rem; line-height: 1.1; letter-spacing: 0; margin-bottom: 4px; }   /* «Esempio 1» al posto del numero */
 .voce h2 { margin-top: 14px; font: 600 1.5rem/1.2 var(--titolo); letter-spacing: -0.01em; text-wrap: balance; }
 .voce em { font-style: normal; color: var(--testo); }
 .voce figure { margin: 0; min-width: 0; }
@@ -151,10 +152,32 @@ main .nota { margin-top: 12px; color: var(--testo-3); font-size: .9375rem; }
   .schermo .tel { width: 100%; }
   .pannelli { width: 100%; }
   .fascia ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fascia ul:has(> li:nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }   /* quattro schede: due per riga, mai una da sola */
   .voce .n { font-size: 4rem; }
   .voce h2 { font-size: 1.75rem; }
 }
 @media (min-width: 900px) {
   .guida main { padding-bottom: 0; }
   .saluto { padding-block: 72px 80px; font-size: 2.5rem; }
+}
+
+/* la seconda parte, «How I use it» / «Come la uso io» (20/11 sera): la sua testata come il titolo della pagina, la tabella del
+   verdetto fra due fili, i casi coi due telefoni affiancati */
+.parte { margin-top: 112px; }
+.parte .titolo-parte { margin: 0; font: 400 2.375rem/1.08 var(--titolo); letter-spacing: -0.03em; text-wrap: balance; }
+.parte .lead { max-width: 36rem; }
+.fascia + .parte { margin-top: 96px; }
+.tabella { width: 100%; margin-top: 18px; border-collapse: collapse; color: var(--testo-2); }
+.tabella th, .tabella td { padding: 11px 16px 11px 0; border-top: 1px solid var(--filo); text-align: left; vertical-align: top; }
+.tabella thead th { padding-top: 0; border-top: 0; color: var(--testo-3); font: 500 .8125rem/1.3 var(--testo-font); letter-spacing: .06em; text-transform: uppercase; }
+.tabella tbody tr:last-child td { border-bottom: 1px solid var(--filo); }
+.tabella td:first-child { width: 42%; }
+.tabella td:last-child { padding-right: 0; }
+.coppia .due { display: flex; justify-content: center; gap: 16px; }
+.coppia .due .tel { flex: 0 1 200px; width: auto; margin: 0; }
+@media (min-width: 760px) {
+  .voce.doppia { grid-template-columns: minmax(0, 1fr) 416px; }
+  .voce.doppia:nth-of-type(even) { grid-template-columns: 416px minmax(0, 1fr); }
+  .parte .titolo-parte { font-size: 3.25rem; }
+  .parte { margin-top: 144px; }
 }
